@@ -1,0 +1,37 @@
+{
+  "name": "todo-app",
+  "version": "1.0.0",
+  "description": "Todo App",
+  "main": "index.js",
+  "scripts": {
+    "pretest": "NODE_ENV=test npx sequelize-cli db:drop && NODE_ENV=test npx sequelize-cli db:create",
+    "test": "NODE_ENV=test jest --detectOpenHandles",
+    "start": "node index.js",
+    "prepare": "husky install",
+    "dev": "nodemon index.js"
+  },
+  "author": "vamsi bellam",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.22.0",
+    "husky": "^8.0.1",
+    "jest": "^28.1.3",
+    "lint-staged": "^13.0.3",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.7.1",
+    "sequelize-cli": "^6.4.1",
+    "supertest": "^6.2.4"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint",
+      "prettier --write ."
+    ]
+  },
+  "dependencies": {
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
+    "pg": "^8.8.0",
+    "sequelize": "^6.23.1"
+  }
+}
