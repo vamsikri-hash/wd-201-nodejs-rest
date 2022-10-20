@@ -3,12 +3,30 @@
  <head>
    <meta charset="UTF-8" />
    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   <title>Index page</title>
+   <title>Todo Manager</title>
    <link rel="stylesheet" href="/css/styles.css" />
    <script src="/js/script.js"></script>
+   <script src="https://cdn.tailwindcss.com"></script>
  </head>
  <body>
-      <%- include('header.ejs') %>
+     <div class="grid grid-cols-6">
+      <div class="col-start-3 col-span-2">
+        <%- include('header.ejs') %>
+        <form>
+          <div class="flex gap-2 py-4">
+            <div class="flex-auto">
+              <input type="text" placeholder="What's next?" class="border border-gray-300text-gray-900 w-full rounded p-2 text-sm" required>
+            </div>
+            <div class="flex-auto">
+              <input type="date" class="border border-gray-300text-gray-900 w-full rounded p-2 text-sm leading-4">
+            </div>
+            <div class="flex-auto">
+              <button type="submit" class="bg-green-600 text-white px-5 py-1.5 rounded font-meduim mr-2 mb-2">Add</button>
+            </div>
+          </div>
+        </form>
+      </div>
+     </div>
       <%- include('todos.ejs', {allTodos}) %>
       <%- include('footer.ejs') %>
  </body>
