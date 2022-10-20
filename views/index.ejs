@@ -1,33 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
- <head>
-   <meta charset="UTF-8" />
-   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   <title>Todo Manager</title>
-   <link rel="stylesheet" href="/css/styles.css" />
-   <script src="/js/script.js"></script>
-   <script src="https://cdn.tailwindcss.com"></script>
- </head>
- <body>
-     <div class="grid grid-cols-6">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo Manager</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <script src="/js/script.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div class="grid grid-cols-6">
       <div class="col-start-3 col-span-2">
         <%- include('header.ejs') %>
         <form>
           <div class="flex gap-2 py-4">
             <div class="flex-auto">
-              <input type="text" placeholder="What's next?" class="border border-gray-300text-gray-900 w-full rounded p-2 text-sm" required>
+              <input
+                type="text"
+                placeholder="What's next?"
+                class="border border-gray-300text-gray-900 w-full rounded p-2 text-sm"
+                required
+              />
             </div>
             <div class="flex-auto">
-              <input type="date" class="border border-gray-300text-gray-900 w-full rounded p-2 text-sm leading-4">
+              <input
+                type="date"
+                class="border border-gray-300text-gray-900 w-full rounded p-2 text-sm leading-4"
+              />
             </div>
             <div class="flex-auto">
-              <button type="submit" class="bg-green-600 text-white px-5 py-1.5 rounded font-meduim mr-2 mb-2">Add</button>
+              <button
+                type="submit"
+                class="bg-green-600 text-white px-5 py-1.5 rounded font-meduim mr-2 mb-2"
+              >
+                Add
+              </button>
             </div>
           </div>
         </form>
+        <div>
+          <h5>Overdue</h5>
+          <ul class="list-none">
+            <li>
+              <div
+                class="flex items-center w-fit my-2 px-2 py-1 hover:bg-purple-50"
+              >
+                <input
+                  type="checkbox"
+                  id="todo-checkbox-1"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 rounder border"
+                />
+                <label
+                  for="todo-checkbox-1"
+                  class="ml-2 text-sm text-gray-600 cursor-pointer"
+                  >Learn Ocaml</label
+                >
+              </div>
+            </li>
+
+            <li>
+              <div
+                class="flex items-center w-fit my-2 px-2 py-1 hover:bg-purple-50"
+              >
+                <input
+                  type="checkbox"
+                  id="todo-checkbox-2"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 rounder border"
+                />
+                <label
+                  for="todo-checkbox-2"
+                  class="ml-2 text-sm text-gray-600 cursor-pointer"
+                  >Read FP papers</label
+                >
+              </div>
+            </li>
+          </ul>
+          <h5>Due Today</h5>
+          <ul class="list-none">
+            <li>
+              <div
+                class="flex items-center w-fit my-2 px-2 py-1 hover:bg-purple-50"
+              >
+                <input
+                  type="checkbox"
+                  id="todo-checkbox-3"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 rounder border"
+                />
+                <label
+                  for="todo-checkbox-3"
+                  class="ml-2 text-sm text-gray-600 cursor-pointer"
+                  >Pay Mobile Bill</label
+                >
+              </div>
+            </li>
+          </ul>
+
+          <h5>Due Later</h5>
+          <ul>
+            <li>
+              <div
+                class="flex items-center w-fit my-2 px-2 py-1 hover:bg-purple-50"
+              >
+                <input
+                  type="checkbox"
+                  id="todo-checkbox-4"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 rounder border"
+                />
+                <label
+                  for="todo-checkbox-4"
+                  class="ml-2 text-sm text-gray-600 cursor-pointer"
+                  >Read elm blog</label
+                >
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
-     </div>
-      <%- include('todos.ejs', {allTodos}) %>
-      <%- include('footer.ejs') %>
- </body>
+    </div>
+    <%- include('todos.ejs', {allTodos}) %> <%- include('footer.ejs') %>
+  </body>
 </html>
