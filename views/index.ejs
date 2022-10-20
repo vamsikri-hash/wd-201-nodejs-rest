@@ -40,83 +40,16 @@
         </form>
         <div>
           <h5>Overdue</h5>
-          <ul class="list-none">
-            <li>
-              <div
-                class="flex items-center w-fit my-2 px-2 py-1 hover:bg-purple-50"
-              >
-                <input
-                  type="checkbox"
-                  id="todo-checkbox-1"
-                  class="w-4 h-4 text-blue-600 bg-gray-100 rounder border"
-                />
-                <label
-                  for="todo-checkbox-1"
-                  class="ml-2 text-sm text-gray-600 cursor-pointer"
-                  >Learn Ocaml</label
-                >
-              </div>
-            </li>
+          <%- include('todos.ejs', {todos: overdueTodos}) %>
 
-            <li>
-              <div
-                class="flex items-center w-fit my-2 px-2 py-1 hover:bg-purple-50"
-              >
-                <input
-                  type="checkbox"
-                  id="todo-checkbox-2"
-                  class="w-4 h-4 text-blue-600 bg-gray-100 rounder border"
-                />
-                <label
-                  for="todo-checkbox-2"
-                  class="ml-2 text-sm text-gray-600 cursor-pointer"
-                  >Read FP papers</label
-                >
-              </div>
-            </li>
-          </ul>
           <h5>Due Today</h5>
-          <ul class="list-none">
-            <li>
-              <div
-                class="flex items-center w-fit my-2 px-2 py-1 hover:bg-purple-50"
-              >
-                <input
-                  type="checkbox"
-                  id="todo-checkbox-3"
-                  class="w-4 h-4 text-blue-600 bg-gray-100 rounder border"
-                />
-                <label
-                  for="todo-checkbox-3"
-                  class="ml-2 text-sm text-gray-600 cursor-pointer"
-                  >Pay Mobile Bill</label
-                >
-              </div>
-            </li>
-          </ul>
+          <%- include('todos.ejs', {todos: dueTodayTodos}) %>
 
           <h5>Due Later</h5>
-          <ul>
-            <li>
-              <div
-                class="flex items-center w-fit my-2 px-2 py-1 hover:bg-purple-50"
-              >
-                <input
-                  type="checkbox"
-                  id="todo-checkbox-4"
-                  class="w-4 h-4 text-blue-600 bg-gray-100 rounder border"
-                />
-                <label
-                  for="todo-checkbox-4"
-                  class="ml-2 text-sm text-gray-600 cursor-pointer"
-                  >Read elm blog</label
-                >
-              </div>
-            </li>
-          </ul>
+          <%- include('todos.ejs', {todos: dueLaterTodos}) %>
         </div>
       </div>
     </div>
-    <%- include('todos.ejs', {allTodos}) %> <%- include('footer.ejs') %>
+    <%- include('footer.ejs') %>
   </body>
 </html>
