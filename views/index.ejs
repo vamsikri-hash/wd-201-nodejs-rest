@@ -40,13 +40,13 @@
         </form>
         <div>
           <h5>Overdue</h5>
-          <%- include('todos.ejs') %>
+          <%- include('todos.ejs', {todos: overdueTodos}) %>
 
           <h5>Due Today</h5>
-          <!-- Render data in next level -->
-          <h5>Due Later</h5>
-          <!-- Render data in next level -->
+          <%- include('todos.ejs', {todos: dueTodayTodos}) %>
 
+          <h5>Due Later</h5>
+          <%- include('todos.ejs', {todos: dueLaterTodos}) %>
         </div>
       </div>
     </div>
