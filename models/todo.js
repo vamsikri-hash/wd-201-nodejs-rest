@@ -24,8 +24,10 @@ module.exports = (sequelize, DataTypes) => {
       return this.update({ completed: true });
     }
 
-    delete() {
-      return this.destroy();
+    static async remove(id) {
+      return this.destroy({
+        where: { id },
+      });
     }
 
     static async overdue() {
