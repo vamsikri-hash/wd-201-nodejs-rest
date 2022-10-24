@@ -7,6 +7,8 @@ const { Todo } = require("./models");
 
 app.use(bodyParser.json());
 
+app.use(express.urlencoded({ extended: false }));
+
 app.set("view engine", "ejs");
 
 app.use(express.static(path.join(__dirname, "/public")));
@@ -49,8 +51,8 @@ app.get("/todos/:id", async function (request, response) {
 app.post("/todos", async function (request, response) {
   console.log("Creating new Todo: ", request.body);
   try {
-    const todo = await Todo.addTodo(request.body);
-    return response.json(todo);
+    await Todo.addTodo(request.body);
+    return response.redirect("/");
   } catch (error) {
     console.log(error);
     return response.status(422).json(error);
