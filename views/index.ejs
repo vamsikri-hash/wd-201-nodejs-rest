@@ -64,13 +64,13 @@
           </div>
         </form>
         <div>
-          <h5>Overdue</h5>
+          <h5>Overdue <span id="count-overdue" class="bg-slate-300 px-2 py-0.5 rounded"><%= overdueTodos.length %></span></h5>
           <%- include('todos.ejs', {todos: overdueTodos}) %>
 
-          <h5>Due Today</h5>
+          <h5>Due Today <span id="count-due-today" class="bg-slate-300 px-2 py-0.5 rounded"><%= dueTodayTodos.length %></span></h5>
           <%- include('todos.ejs', {todos: dueTodayTodos}) %>
 
-          <h5>Due Later</h5>
+          <h5>Due Later <span id="count-due-later" class="bg-slate-300 px-2 py-0.5 rounded"><%= dueLaterTodos.length %></span></h5>
           <%- include('todos.ejs', {todos: dueLaterTodos}) %>
         </div>
       </div>
