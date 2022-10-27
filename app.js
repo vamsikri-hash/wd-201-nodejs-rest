@@ -1,4 +1,6 @@
 const express = require("express");
+const csrf = require("csurf");
+const cookieParser = require("cookie-parser");
 const app = express();
 const bodyParser = require("body-parser");
 const path = require("path");
@@ -9,19 +11,27 @@ app.use(bodyParser.json());
 
 app.use(express.urlencoded({ extended: false }));
 
+app.use(cookieParser("shh! some secret string"));
+
+app.use(csrf({ cookie: true }));
+
 app.set("view engine", "ejs");
 
 app.use(express.static(path.join(__dirname, "/public")));
 
 app.get("/", async (request, response) => {
-  const allTodos = await Todo.getAllTodos();
-  const overdueTodos = await Todo.overdue();
-  const dueTodayTodos = await Todo.dueToday();
-  const dueLaterTodos = await Todo.dueLater();
+  const overdue = await Todo.overdue();
+  const dueToday = await Todo.dueToday();
+  const dueLater = await Todo.dueLater();
   if (request.accepts("html")) {
-    response.render("index", { overdueTodos, dueTodayTodos, dueLaterTodos });
+    response.render("index", {
+      overdue,
+      dueToday,
+      dueLater,
+      csrfToken: request.csrfToken(),
+    });
   } else {
-    response.json({ allTodos });
+    response.json({ overdue, dueToday, dueLater });
   }
 });
 

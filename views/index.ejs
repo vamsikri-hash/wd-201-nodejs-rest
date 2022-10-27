@@ -3,15 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="<%= csrfToken %>" />
     <title>Todo Manager</title>
     <link rel="stylesheet" href="/css/styles.css" />
     <script src="/js/script.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+      const token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+
       function updateTodo(id) {
         fetch(`/todos/${id}/markAsCompleted`, {
           method: "PUT",
-          headers: {"Content-Type": "application/json"}
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({"_csrf": token})
         }).then((res) => {
           if(res.ok){
             window.location.reload();
@@ -22,7 +26,8 @@
       function deleteTodo(id) {
         fetch(`/todos/${id}`, {
           method: "DELETE",
-          headers: {"Content-Type": "application/json"}
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({"_csrf": token})
         }).then((res) => {
           if(res.ok){
             window.location.reload();
@@ -36,6 +41,7 @@
       <div class="col-start-3 col-span-2">
         <%- include('header.ejs') %>
         <form action="/todos" method="post">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
           <div class="flex gap-2 py-4">
             <div class="flex-auto">
               <input
@@ -64,14 +70,14 @@
           </div>
         </form>
         <div>
-          <h5>Overdue <span id="count-overdue" class="bg-slate-300 px-2 py-0.5 rounded"><%= overdueTodos.length %></span></h5>
-          <%- include('todos.ejs', {todos: overdueTodos}) %>
+          <h5>Overdue <span id="count-overdue" class="bg-slate-300 px-2 py-0.5 rounded"><%= overdue.length %></span></h5>
+          <%- include('todos.ejs', {todos: overdue}) %>
 
-          <h5>Due Today <span id="count-due-today" class="bg-slate-300 px-2 py-0.5 rounded"><%= dueTodayTodos.length %></span></h5>
-          <%- include('todos.ejs', {todos: dueTodayTodos}) %>
+          <h5>Due Today <span id="count-due-today" class="bg-slate-300 px-2 py-0.5 rounded"><%= dueToday.length %></span></h5>
+          <%- include('todos.ejs', {todos: dueToday}) %>
 
-          <h5>Due Later <span id="count-due-later" class="bg-slate-300 px-2 py-0.5 rounded"><%= dueLaterTodos.length %></span></h5>
-          <%- include('todos.ejs', {todos: dueLaterTodos}) %>
+          <h5>Due Later <span id="count-due-later" class="bg-slate-300 px-2 py-0.5 rounded"><%= dueLater.length %></span></h5>
+          <%- include('todos.ejs', {todos: dueLater}) %>
         </div>
       </div>
     </div>
