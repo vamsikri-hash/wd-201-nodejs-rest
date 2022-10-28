@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     setCompletionStatus(status) {
-      return this.update({ completed: !status });
+      return this.update({ completed: status });
     }
 
     static async remove(id) {
@@ -36,6 +36,7 @@ module.exports = (sequelize, DataTypes) => {
           dueDate: {
             [Op.lt]: new Date(),
           },
+          completed: false,
         },
         order: [["id", "ASC"]],
       });
@@ -47,6 +48,7 @@ module.exports = (sequelize, DataTypes) => {
           dueDate: {
             [Op.eq]: new Date(),
           },
+          completed: false,
         },
         order: [["id", "ASC"]],
       });
@@ -58,6 +60,16 @@ module.exports = (sequelize, DataTypes) => {
           dueDate: {
             [Op.gt]: new Date(),
           },
+          completed: false,
+        },
+        order: [["id", "ASC"]],
+      });
+    }
+
+    static async completed() {
+      return await Todo.findAll({
+        where: {
+          completed: true,
         },
         order: [["id", "ASC"]],
       });
