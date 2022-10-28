@@ -92,7 +92,7 @@ app.delete("/todos/:id", async function (request, response) {
     return response.json({ success: true });
   } catch (error) {
     console.log(error);
-    return response.status(422).json(false);
+    return response.status(422).json({ success: false });
   }
 });
 
