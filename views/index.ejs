@@ -12,7 +12,7 @@
       const token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
 
       function updateTodo(id) {
-        fetch(`/todos/${id}/markAsCompleted`, {
+        fetch(`/todos/${id}/setCompletionStatus`, {
           method: "PUT",
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify({"_csrf": token})

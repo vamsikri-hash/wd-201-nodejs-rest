@@ -57,7 +57,7 @@ describe("List the todo items", function () {
     csrfToken = extractCsrfToken(res);
 
     const markCompleteResponse = await agent
-      .put(`/todos/${latestTodo.id}/markASCompleted`)
+      .put(`/todos/${latestTodo.id}/setCompletionStatus`)
       .send({ _csrf: csrfToken });
     const parsedUpdateResponse = JSON.parse(markCompleteResponse.text);
     expect(parsedUpdateResponse.completed).toBe(true);
