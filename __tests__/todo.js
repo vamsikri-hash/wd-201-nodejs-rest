@@ -139,4 +139,56 @@ describe("List the todo items", function () {
     const parsedDeleteResponse = JSON.parse(deleteResponse.text);
     expect(parsedDeleteResponse.success).toBe(true);
   });
+
+  test("Should list all todos", async () => {
+    const initialTodosResponse = await agent
+      .get("/todos")
+      .set("Accept", "application/json");
+    const parsedInitialTodosResponse = JSON.parse(initialTodosResponse.text);
+
+    let res = await agent.get("/");
+    let csrfToken = extractCsrfToken(res);
+
+    await agent.post("/todos").send({
+      title: "Try Something",
+      dueDate: new Date().toISOString(),
+      completed: false,
+      _csrf: csrfToken,
+    });
+
+    const finalTodosResponse = await agent
+      .get("/todos")
+      .set("Accept", "application/json");
+    const parsedFinalTodosResponse = JSON.parse(finalTodosResponse.text);
+
+    expect(parsedFinalTodosResponse.length).toBe(
+      parsedInitialTodosResponse.length + 1
+    );
+  });
+
+  test("Should get a todo", async () => {
+    let res = await agent.get("/");
+    let csrfToken = extractCsrfToken(res);
+
+    await agent.post("/todos").send({
+      title: "Try Anything",
+      dueDate: new Date().toISOString(),
+      completed: false,
+      _csrf: csrfToken,
+    });
+
+    const groupedTodosResponse = await agent
+      .get("/")
+      .set("Accept", "application/json");
+    const parsedGroupedResponse = JSON.parse(groupedTodosResponse.text);
+    const dueTodayCount = parsedGroupedResponse.dueToday.length;
+    const latestTodo = parsedGroupedResponse.dueToday[dueTodayCount - 1];
+
+    const actualTodoResponse = await agent
+      .get(`/todos/${latestTodo.id}`)
+      .set("Accept", "application/json");
+    const parsedActualTodoResponse = JSON.parse(actualTodoResponse.text);
+
+    expect(parsedActualTodoResponse.title).toBe("Try Anything");
+  });
 });
