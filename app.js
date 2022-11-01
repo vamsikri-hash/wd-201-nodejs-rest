@@ -71,11 +71,11 @@ app.post("/todos", async function (request, response) {
   }
 });
 
-app.put("/todos", async function (request, response) {
-  console.log("We have to update a Todo with ID: ", request.body.id);
+app.put("/todos/:id", async function (request, response) {
+  console.log("We have to update a Todo with ID: ", request.params.id);
 
   try {
-    const todo = await Todo.findByPk(request.body.id);
+    const todo = await Todo.findByPk(request.params.id);
     const updatedTodo = await todo.setCompletionStatus(request.body.completed);
     return response.json(updatedTodo);
   } catch (error) {
