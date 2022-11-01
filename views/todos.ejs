@@ -12,7 +12,7 @@
         <%= todos[i].completed ? "checked" : "" %>
       />
       <label
-        for=<%= `todo-checkbox-${i}` %>
+        for="todo-checkbox-<%= todos[i].id %>"
         class="ml-2 text-sm text-gray-600 cursor-pointer"
         ><%= todos[i].title %></label
       >
