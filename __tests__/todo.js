@@ -57,8 +57,8 @@ describe("List the todo items", function () {
     csrfToken = extractCsrfToken(res);
 
     const markCompleteResponse = await agent
-      .put(`/todos/${latestTodo.id}/setCompletionStatus`)
-      .send({ _csrf: csrfToken });
+      .put("/todos")
+      .send({ _csrf: csrfToken, id: latestTodo.id, completed: true });
     const parsedUpdateResponse = JSON.parse(markCompleteResponse.text);
     expect(parsedUpdateResponse.completed).toBe(true);
   });
@@ -86,8 +86,8 @@ describe("List the todo items", function () {
 
     // Mark todo as completed
     const markCompleteResponse = await agent
-      .put(`/todos/${latestTodo.id}/setCompletionStatus`)
-      .send({ _csrf: csrfToken });
+      .put("/todos")
+      .send({ _csrf: csrfToken, id: latestTodo.id, completed: true });
     const parsedUpdateResponse = JSON.parse(markCompleteResponse.text);
     expect(parsedUpdateResponse.completed).toBe(true);
 
@@ -106,8 +106,8 @@ describe("List the todo items", function () {
 
     // Mark same todo as incompleted
     const markInCompleteResponse = await agent
-      .put(`/todos/${latestCompletedTodo.id}/setCompletionStatus`)
-      .send({ _csrf: csrfToken });
+      .put("/todos")
+      .send({ _csrf: csrfToken, id: latestCompletedTodo.id, completed: false });
     const finalParsedUpdatedResponse = JSON.parse(markInCompleteResponse.text);
     expect(finalParsedUpdatedResponse.completed).toBe(false);
   });
