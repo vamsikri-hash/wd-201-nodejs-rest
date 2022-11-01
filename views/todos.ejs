@@ -1,3 +1,9 @@
+<h5 class="mt-3">
+  <%= title %>
+  <span class="bg-slate-300 px-2 py-0.5 rounded"
+    ><%= overdue.length %></span
+  >
+</h5>
 <ul class="list-none">
   <% for(let i = 0; i < todos.length; i++) { %>
   <li class="Todo-Item">
@@ -7,7 +13,7 @@
       <input
         type="checkbox"
         id="todo-checkbox-<%= todos[i].id %>"
-        class="w-4 h-4 text-blue-600 bg-gray-100 rounder border"
+        class="w-4 h-4 text-blue-600 bg-gray-100 rounder border cursor-pointer"
         onclick="updateTodo(<%= todos[i].id %>)"
         <%= todos[i].completed ? "checked" : "" %>
       />
