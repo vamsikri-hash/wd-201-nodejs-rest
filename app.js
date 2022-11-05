@@ -5,7 +5,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const path = require("path");
 
-const { Todo } = require("./models");
+const { Todo, User } = require("./models");
 
 app.use(bodyParser.json());
 
@@ -34,6 +34,27 @@ app.get("/", async (request, response) => {
     });
   } else {
     response.json({ overdue, dueToday, dueLater, completed });
+  }
+});
+
+app.get("/signup", (request, response) => {
+  response.render("signup", {
+    title: "Signup",
+    csrfToken: request.csrfToken(),
+  });
+});
+
+app.post("/users", async (request, response) => {
+  try {
+    await User.create({
+      firstName: request.body.firstName,
+      lastName: request.body.lastName,
+      email: request.body.email,
+      password: request.body.password,
+    });
+    response.redirect("/");
+  } catch (error) {
+    return response.status(422).json(error);
   }
 });
 
