@@ -9,6 +9,9 @@ const passport = require("passport");
 const connectEnsureLogin = require("connect-ensure-login");
 const session = require("express-session");
 const LocalStrategy = require("passport-local");
+const bcrypt = require("bcrypt");
+
+const saltRounds = 10;
 
 const { Todo, User } = require("./models");
 
@@ -105,12 +108,13 @@ app.get("/signup", (request, response) => {
 });
 
 app.post("/users", async (request, response) => {
+  const hasedPassword = await bcrypt.hash(request.body.password, saltRounds);
   try {
     const user = await User.create({
       firstName: request.body.firstName,
       lastName: request.body.lastName,
       email: request.body.email,
-      password: request.body.password,
+      password: hasedPassword,
     });
 
     request.login(user, (err) => {
