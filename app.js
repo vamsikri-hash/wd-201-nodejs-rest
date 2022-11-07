@@ -86,10 +86,11 @@ app.get(
   "/todos",
   connectEnsureLogin.ensureLoggedIn(),
   async function (request, response) {
-    const overdue = await Todo.overdue();
-    const dueToday = await Todo.dueToday();
-    const dueLater = await Todo.dueLater();
-    const completed = await Todo.completed();
+    const loggedInUserId = request.user.id;
+    const overdue = await Todo.overdue(loggedInUserId);
+    const dueToday = await Todo.dueToday(loggedInUserId);
+    const dueLater = await Todo.dueLater(loggedInUserId);
+    const completed = await Todo.completed(loggedInUserId);
     if (request.accepts("html")) {
       response.render("todos", {
         title: "Todo Application",
@@ -174,8 +175,12 @@ app.post(
   async function (request, response) {
     console.log("Creating new Todo: ", request.body);
     try {
-      await Todo.addTodo(request.body);
-      return response.redirect("/");
+      await Todo.addTodo({
+        title: request.body.title,
+        dueDate: request.body.dueDate,
+        userId: request.user.id,
+      });
+      return response.redirect("/todos");
     } catch (error) {
       console.log(error);
       return response.status(422).json(error);
@@ -209,7 +214,7 @@ app.delete(
     console.log("We have to delete a Todo with ID: ", request.params.id);
 
     try {
-      await Todo.remove(request.params.id);
+      await Todo.remove(request.params.id, request.user.id);
       return response.json({ success: true });
     } catch (error) {
       console.log(error);
