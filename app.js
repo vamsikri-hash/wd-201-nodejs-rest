@@ -46,9 +46,14 @@ passport.use(
       passwordField: "password",
     },
     (username, password, done) => {
-      User.findOne({ where: { email: username, password: password } })
-        .then((user) => {
-          return done(null, user);
+      User.findOne({ where: { email: username } })
+        .then(async (user) => {
+          const result = await bcrypt.compare(password, user.password);
+          if (result) {
+            return done(null, user);
+          } else {
+            done("Invalid Password");
+          }
         })
         .catch((error) => {
           return error;
@@ -125,6 +130,18 @@ app.post("/users", async (request, response) => {
     return response.status(422).json(error);
   }
 });
+
+app.get("/login", (request, response) => {
+  response.render("login", { title: "Login", csrfToken: request.csrfToken() });
+});
+
+app.post(
+  "/session",
+  passport.authenticate("local", { failureRedirect: "/login" }),
+  (request, response) => {
+    response.redirect("/todos");
+  }
+);
 
 app.get("/todos/:id", async function (request, response) {
   console.log("Looking for Todo with ID: ", request.params.id);
