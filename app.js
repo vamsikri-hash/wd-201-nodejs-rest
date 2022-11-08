@@ -86,22 +86,26 @@ app.get(
   "/todos",
   connectEnsureLogin.ensureLoggedIn(),
   async function (request, response) {
-    const loggedInUserId = request.user.id;
-    const overdue = await Todo.overdue(loggedInUserId);
-    const dueToday = await Todo.dueToday(loggedInUserId);
-    const dueLater = await Todo.dueLater(loggedInUserId);
-    const completed = await Todo.completed(loggedInUserId);
-    if (request.accepts("html")) {
-      response.render("todos", {
-        title: "Todo Application",
-        overdue,
-        dueToday,
-        dueLater,
-        completed,
-        csrfToken: request.csrfToken(),
-      });
-    } else {
-      response.json({ overdue, dueToday, dueLater, completed });
+    try {
+      const loggedInUserId = request.user.id;
+      const overdue = await Todo.overdue(loggedInUserId);
+      const dueToday = await Todo.dueToday(loggedInUserId);
+      const dueLater = await Todo.dueLater(loggedInUserId);
+      const completed = await Todo.completed(loggedInUserId);
+      if (request.accepts("html")) {
+        response.render("todos", {
+          title: "Todo Application",
+          overdue,
+          dueToday,
+          dueLater,
+          completed,
+          csrfToken: request.csrfToken(),
+        });
+      } else {
+        response.json({ overdue, dueToday, dueLater, completed });
+      }
+    } catch (error) {
+      return response.status(422).json(error);
     }
   }
 );
@@ -114,13 +118,13 @@ app.get("/signup", (request, response) => {
 });
 
 app.post("/users", async (request, response) => {
-  const hasedPassword = await bcrypt.hash(request.body.password, saltRounds);
+  const hashedPassword = await bcrypt.hash(request.body.password, saltRounds);
   try {
     const user = await User.create({
       firstName: request.body.firstName,
       lastName: request.body.lastName,
       email: request.body.email,
-      password: hasedPassword,
+      password: hashedPassword,
     });
 
     request.login(user, (err) => {
