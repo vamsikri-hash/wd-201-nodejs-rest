@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const app = express();
 const bodyParser = require("body-parser");
 const path = require("path");
+const flash = require("connect-flash");
 
 const passport = require("passport");
 const connectEnsureLogin = require("connect-ensure-login");
@@ -24,6 +25,7 @@ app.use(cookieParser("shh! some secret string"));
 app.use(csrf("this_should_be_32_charcater_long", ["POST", "PUT", "DELETE"]));
 
 app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
 app.use(express.static(path.join(__dirname, "/public")));
 
@@ -39,6 +41,13 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(flash());
+
+app.use(function (request, response, next) {
+  response.locals.messages = request.flash();
+  next();
+});
+
 passport.use(
   new LocalStrategy(
     {
@@ -52,11 +61,13 @@ passport.use(
           if (result) {
             return done(null, user);
           } else {
-            done("Invalid Password");
+            done(null, false, {
+              message: "Invalid Password, Please try again!",
+            });
           }
         })
-        .catch((error) => {
-          return error;
+        .catch(() => {
+          done(null, false, { message: "Email doesn't exist" });
         });
     }
   )
@@ -137,7 +148,10 @@ app.post("/users", async (request, response) => {
 });
 
 app.get("/login", (request, response) => {
-  response.render("login", { title: "Login", csrfToken: request.csrfToken() });
+  response.render("login", {
+    title: "Login",
+    csrfToken: request.csrfToken(),
+  });
 });
 
 app.get("/signout", (request, response, next) => {
@@ -151,7 +165,10 @@ app.get("/signout", (request, response, next) => {
 
 app.post(
   "/session",
-  passport.authenticate("local", { failureRedirect: "/login" }),
+  passport.authenticate("local", {
+    failureRedirect: "/login",
+    failureFlash: true,
+  }),
   (request, response) => {
     response.redirect("/todos");
   }
