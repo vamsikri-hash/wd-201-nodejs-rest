@@ -41,7 +41,10 @@
     <div class="grid grid-cols-6 mt-5">
       <div class="col-start-3 col-span-2">
         <%- include('header.ejs') %>
-        <a href="/signout" class="text-red-500">Sign out</a>
+        <div class="flex py-4 justify-between">
+          <div> Welcome <%= firstName  %> </div>
+          <a href="/signout" class="text-red-500">Sign out</a>
+        </div>
         <% if(messages && messages.error && messages.error.length > 0)  { %>
           <%- include('notifications.ejs', {notifications: messages.error, bgColor: "red"}) %>
         <% } %>

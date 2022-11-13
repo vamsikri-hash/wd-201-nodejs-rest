@@ -13,6 +13,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "userId",
       });
     }
+
+    static async getFirstName(id) {
+      const user = await User.findOne({ where: { id } });
+      return user.firstName;
+    }
   }
   User.init(
     {

@@ -107,6 +107,7 @@ app.get(
       const dueToday = await Todo.dueToday(loggedInUserId);
       const dueLater = await Todo.dueLater(loggedInUserId);
       const completed = await Todo.completed(loggedInUserId);
+      const firstName = await User.getFirstName(loggedInUserId);
       if (request.accepts("html")) {
         response.render("todos", {
           title: "Todo Application",
@@ -114,6 +115,7 @@ app.get(
           dueToday,
           dueLater,
           completed,
+          firstName,
           csrfToken: request.csrfToken(),
         });
       } else {
@@ -152,6 +154,7 @@ app.post("/users", async (request, response) => {
 
     request.login(user, (err) => {
       if (err) console.log(err);
+      request.flash("success", "Account created succesfully!");
       response.redirect("/todos");
     });
   } catch (error) {
@@ -257,6 +260,7 @@ app.put(
       const updatedTodo = await todo.setCompletionStatus(
         request.body.completed
       );
+      request.flash("success", "Todo updated succesfully!");
       return response.json(updatedTodo);
     } catch (error) {
       console.log(error);
@@ -273,6 +277,7 @@ app.delete(
 
     try {
       await Todo.remove(request.params.id, request.user.id);
+      request.flash("success", "Todo deleted succesfully!");
       return response.json({ success: true });
     } catch (error) {
       console.log(error);
