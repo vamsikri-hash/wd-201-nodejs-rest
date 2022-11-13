@@ -129,7 +129,12 @@ app.get("/signup", (request, response) => {
 });
 
 app.post("/users", async (request, response) => {
+  if (request.body.password.length < 5) {
+    request.flash("error", "Password should be minimum 5 charcters");
+    return response.redirect("/signup");
+  }
   const hashedPassword = await bcrypt.hash(request.body.password, saltRounds);
+  console.log(hashedPassword);
   try {
     const user = await User.create({
       firstName: request.body.firstName,
@@ -143,6 +148,22 @@ app.post("/users", async (request, response) => {
       response.redirect("/todos");
     });
   } catch (error) {
+    if (error.name === "SequelizeValidationError") {
+      request.flash(
+        "error",
+        error.errors.map((err) => err.message)
+      );
+      return response.redirect("/signup");
+    }
+
+    if (error.name === "SequelizeUniqueConstraintError") {
+      request.flash(
+        "error",
+        error.errors.map((err) => err.message)
+      );
+      return response.redirect("/signup");
+    }
+    console.log("here!!!!!!");
     return response.status(422).json(error);
   }
 });
@@ -201,9 +222,19 @@ app.post(
         dueDate: request.body.dueDate,
         userId: request.user.id,
       });
+      request.flash("error", "Todo added succesfully!");
       return response.redirect("/todos");
     } catch (error) {
       console.log(error);
+
+      if (error.name === "SequelizeValidationError") {
+        request.flash(
+          "error",
+          error.errors.map((err) => err.message)
+        );
+        return response.redirect("/todos");
+      }
+
       return response.status(422).json(error);
     }
   }

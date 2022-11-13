@@ -12,6 +12,9 @@
       <div class="col-start-3 col-span-2">
         <%- include('header.ejs') %>
         <h5 class="py-4">Signup as a new user</h5>
+        <% if(messages && messages.error && messages.error.length > 0)  { %>
+          <%- include('notifications.ejs', {notifications: messages.error, bgColor: "red"}) %>
+        <% } %>
         <form action="/users" method="post">
           <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
           <div class="py-3">
@@ -55,6 +58,7 @@
             </button>
           </div>
         </form>
+        <p class="py-2">Already have an account? <a href="/login" class="text-green-600">Sign-in</a></p>
       </div>
     </div>
     <%- include('footer.ejs') %>

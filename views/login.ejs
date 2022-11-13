@@ -12,6 +12,9 @@
       <div class="col-start-3 col-span-2">
         <%- include('header.ejs') %>
         <h5 class="py-4" > Login to your account</h5>
+        <% if(messages && messages.error && messages.error.length > 0)  { %>
+          <%- include('notifications.ejs', {notifications: messages.error, bgColor: "red"}) %>
+        <% } %>
         <form action="/session" method="post">
           <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
           <div class="py-3">
@@ -39,11 +42,7 @@
             </button>
           </div>
         </form>
-        <% if(messages && messages.error && messages.error.length > 0)  { %>
-          <% for(var i=0; i<messages.error.length; i++) {%>
-                  <li> <%= messages.error[i] %></li>
-          <% } %>
-        <% } %>
+        <p class="py-2">New here? <a href="/signup" class="text-green-600">Sign-up now</a></p>
       </div>
     </div>
     <%- include('footer.ejs') %>
