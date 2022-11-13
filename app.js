@@ -186,6 +186,7 @@ app.get("/signout", (request, response, next) => {
       if (err) {
         return next(err);
       }
+      request.flash("success", "Signed out succesfully! See you again!");
       response.redirect("/");
     });
   } catch (error) {
