@@ -43,7 +43,7 @@ app.use(passport.session());
 
 app.use(flash());
 
-app.use(function (request, response, next) {
+app.use((request, response, next) => {
   response.locals.messages = request.flash();
   next();
 });
@@ -87,16 +87,20 @@ passport.deserializeUser((id, done) => {
 });
 
 app.get("/", async (request, response) => {
-  response.render("index", {
-    title: "Todo Application",
-    csrfToken: request.csrfToken(),
-  });
+  try {
+    response.render("index", {
+      title: "Todo Application",
+      csrfToken: request.csrfToken(),
+    });
+  } catch (error) {
+    return response.status(422).json(error);
+  }
 });
 
 app.get(
   "/todos",
   connectEnsureLogin.ensureLoggedIn(),
-  async function (request, response) {
+  async (request, response) => {
     try {
       const loggedInUserId = request.user.id;
       const overdue = await Todo.overdue(loggedInUserId);
@@ -122,10 +126,14 @@ app.get(
 );
 
 app.get("/signup", (request, response) => {
-  response.render("signup", {
-    title: "Signup",
-    csrfToken: request.csrfToken(),
-  });
+  try {
+    response.render("signup", {
+      title: "Signup",
+      csrfToken: request.csrfToken(),
+    });
+  } catch (error) {
+    return response.status(422).json(error);
+  }
 });
 
 app.post("/users", async (request, response) => {
@@ -163,25 +171,32 @@ app.post("/users", async (request, response) => {
       );
       return response.redirect("/signup");
     }
-    console.log("here!!!!!!");
     return response.status(422).json(error);
   }
 });
 
 app.get("/login", (request, response) => {
-  response.render("login", {
-    title: "Login",
-    csrfToken: request.csrfToken(),
-  });
+  try {
+    response.render("login", {
+      title: "Login",
+      csrfToken: request.csrfToken(),
+    });
+  } catch (error) {
+    return response.status(422).json(error);
+  }
 });
 
 app.get("/signout", (request, response, next) => {
-  request.logout((err) => {
-    if (err) {
-      return next(err);
-    }
-    response.redirect("/");
-  });
+  try {
+    request.logout((err) => {
+      if (err) {
+        return next(err);
+      }
+      response.redirect("/");
+    });
+  } catch (error) {
+    return response.status(422).json(error);
+  }
 });
 
 app.post(
@@ -191,14 +206,18 @@ app.post(
     failureFlash: true,
   }),
   (request, response) => {
-    response.redirect("/todos");
+    try {
+      response.redirect("/todos");
+    } catch (error) {
+      return response.status(422).json(error);
+    }
   }
 );
 
 app.get(
   "/todos/:id",
   connectEnsureLogin.ensureLoggedIn(),
-  async function (request, response) {
+  async (request, response) => {
     console.log("Looking for Todo with ID: ", request.params.id);
 
     try {
@@ -214,7 +233,7 @@ app.get(
 app.post(
   "/todos",
   connectEnsureLogin.ensureLoggedIn(),
-  async function (request, response) {
+  async (request, response) => {
     console.log("Creating new Todo: ", request.body);
     try {
       await Todo.addTodo({
@@ -243,7 +262,7 @@ app.post(
 app.put(
   "/todos/:id",
   connectEnsureLogin.ensureLoggedIn(),
-  async function (request, response) {
+  async (request, response) => {
     console.log("We have to update a Todo with ID: ", request.params.id);
 
     try {
@@ -262,7 +281,7 @@ app.put(
 app.delete(
   "/todos/:id",
   connectEnsureLogin.ensureLoggedIn(),
-  async function (request, response) {
+  async (request, response) => {
     console.log("We have to delete a Todo with ID: ", request.params.id);
 
     try {

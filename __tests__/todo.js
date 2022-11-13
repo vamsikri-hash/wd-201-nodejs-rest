@@ -21,7 +21,7 @@ const login = async (agent, username, password) => {
   });
 };
 
-describe("List the todo items", function () {
+describe("List the todo items", () => {
   beforeAll(async () => {
     await db.sequelize.sync({ force: true });
     server = app.listen(4000, () => {});
