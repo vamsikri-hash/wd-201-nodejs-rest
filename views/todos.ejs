@@ -45,6 +45,9 @@
         <% if(messages && messages.error && messages.error.length > 0)  { %>
           <%- include('notifications.ejs', {notifications: messages.error, bgColor: "red"}) %>
         <% } %>
+        <% if(messages && messages.success && messages.success.length > 0)  { %>
+          <%- include('notifications.ejs', {notifications: messages.success, bgColor: "green"}) %>
+        <% } %>
         <form action="/todos" method="post">
           <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
           <div class="flex gap-2 py-4">

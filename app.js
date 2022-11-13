@@ -142,7 +142,6 @@ app.post("/users", async (request, response) => {
     return response.redirect("/signup");
   }
   const hashedPassword = await bcrypt.hash(request.body.password, saltRounds);
-  console.log(hashedPassword);
   try {
     const user = await User.create({
       firstName: request.body.firstName,
@@ -157,19 +156,11 @@ app.post("/users", async (request, response) => {
     });
   } catch (error) {
     if (error.name === "SequelizeValidationError") {
-      request.flash(
-        "error",
-        error.errors.map((err) => err.message)
-      );
-      return response.redirect("/signup");
+      return redirectAndShowErrors(request, response, error, "/signup");
     }
 
     if (error.name === "SequelizeUniqueConstraintError") {
-      request.flash(
-        "error",
-        error.errors.map((err) => err.message)
-      );
-      return response.redirect("/signup");
+      return redirectAndShowErrors(request, response, error, "/signup");
     }
     return response.status(422).json(error);
   }
@@ -241,17 +232,13 @@ app.post(
         dueDate: request.body.dueDate,
         userId: request.user.id,
       });
-      request.flash("error", "Todo added succesfully!");
+      request.flash("success", "Todo added succesfully!");
       return response.redirect("/todos");
     } catch (error) {
       console.log(error);
 
       if (error.name === "SequelizeValidationError") {
-        request.flash(
-          "error",
-          error.errors.map((err) => err.message)
-        );
-        return response.redirect("/todos");
+        return redirectAndShowErrors(request, response, error, "/todos");
       }
 
       return response.status(422).json(error);
@@ -293,5 +280,13 @@ app.delete(
     }
   }
 );
+
+const redirectAndShowErrors = (request, response, error, redirectRoute) => {
+  request.flash(
+    "error",
+    error.errors.map((err) => err.message)
+  );
+  response.redirect(redirectRoute);
+};
 
 module.exports = app;
